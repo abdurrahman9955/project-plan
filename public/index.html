@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturing KPI Dashboard - Project Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .nav-link.active {
+            color: #10B981; /* emerald-500 */
+            border-bottom-color: #10B981;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Chosen Palette: Slate & Emerald -->
+    <!-- Application Structure Plan: A single-page, vertically scrolling application with a fixed navigation header. The structure is thematic, with dedicated sections for the project overview, each of the three KPI dashboards, and the AI features. This non-linear, jump-to-section approach is chosen because it allows a stakeholder (client or developer) to quickly access the specific part of the plan they are interested in, making it more efficient than reading a linear document. Each dashboard section uses a two-column layout to present specifications alongside a visual mock-up, directly linking requirements to the proposed outcome. -->
+    <!-- Visualization & Content Choices: 
+        Project Phases -> Goal: Organize -> Method: HTML/CSS List -> Interaction: None -> Justification: Clearly visualizes the project flow.
+        COPQ Costs -> Goal: Compare -> Method: Chart.js Bar Chart -> Interaction: Hover Tooltips -> Justification: Implements the report's suggestion for cost breakdown.
+        OEE Trend -> Goal: Change -> Method: Chart.js Line Chart -> Interaction: Hover Tooltips -> Justification: Best practice for showing trends over time.
+        Cost/Unit KPIs -> Goal: Inform -> Method: Chart.js Doughnut Chart -> Interaction: Hover Tooltips -> Justification: Visually engaging way to show percentage KPIs like efficiency/yield.
+        Filters/KPIs -> Goal: Inform -> Method: Styled HTML -> Interaction: None (Static) -> Justification: Clearly lists the required interactive elements and metrics for the final build.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-slate-900">KPI Dashboard Plan</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link px-3 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 border-b-2 border-transparent">Overview</a>
+                        <a href="#copq" class="nav-link px-3 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 border-b-2 border-transparent">COPQ</a>
+                        <a href="#oee" class="nav-link px-3 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 border-b-2 border-transparent">OEE</a>
+                        <a href="#cost-per-unit" class="nav-link px-3 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 border-b-2 border-transparent">Cost/Unit</a>
+                        <a href="#ai-insights" class="nav-link px-3 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 border-b-2 border-transparent">AI Insights</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <section id="overview" class="mb-24 scroll-mt-24">
+            <h1 class="text-4xl font-bold text-slate-900 mb-4 text-center">Project Overview</h1>
+            <p class="text-lg text-slate-600 mb-12 max-w-3xl mx-auto text-center">This interactive document outlines the structured approach for building the Manufacturing KPI Dashboards. The goal is to translate performance requirements into an intuitive, interactive experience for monitoring Cost of Poor Quality (COPQ), Overall Equipment Effectiveness (OEE), and Cost per Unit.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4 font-bold text-xl">1</div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Setup & Foundation</h3>
+                    <p class="text-sm text-slate-500">Establish the project environment, folder structure, and data ingestion/cleaning pipelines.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4 font-bold text-xl">2</div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">KPI Calculation</h3>
+                    <p class="text-sm text-slate-500">Develop and validate the core Python functions for all required KPI calculations.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4 font-bold text-xl">3</div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Dashboard UI Dev</h3>
+                    <p class="text-sm text-slate-500">Build the interactive user interface using Dash and Plotly, focusing on a responsive, hybrid layout.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4 font-bold text-xl">4</div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">AI Insights</h3>
+                    <p class="text-sm text-slate-500">Integrate AI-driven suggestions for predictive alerts, root cause analysis, and optimization.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-200">
+                    <div class="flex items-center justify-center h-12 w-12 rounded-full bg-emerald-100 text-emerald-600 mb-4 font-bold text-xl">5</div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">Testing & Refinement</h3>
+                    <p class="text-sm text-slate-500">Conduct thorough unit, integration, and UI/UX testing to ensure quality and performance.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="space-y-24">
+            <section id="copq" class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Cost of Poor Quality (COPQ) Dashboard</h2>
+                <p class="text-md text-slate-600 mb-8">This dashboard will provide a clear view of costs associated with quality failures, helping to identify and prioritize areas for improvement.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800">KPIs & Calculations</h3>
+                        <ul class="space-y-4 text-slate-700">
+                            <li><strong class="font-medium text-slate-900">Total COPQ (£):</strong> Sum of all quality-related costs.</li>
+                            <li><strong class="font-medium text-slate-900">Costs as % of Revenue:</strong> Scrap, Rework, Warranty costs shown as a percentage of total revenue.</li>
+                            <li><strong class="font-medium text-slate-900">Defect Rate (PPM):</strong> `(Defects / Units Produced) × 1,000,000`</li>
+                            <li><strong class="font-medium text-slate-900">Scrap Cost:</strong> `Units Scrapped × (Material + Labor + Overhead)`</li>
+                        </ul>
+                        <h3 class="text-xl font-semibold mt-8 mb-4 text-slate-800">Interactive Filters</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <span class="bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">Month</span>
+                            <span class="bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">Defect Type</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800 text-center">Visualization Example: Cost Breakdown</h3>
+                        <div class="chart-container">
+                            <canvas id="copqChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="oee" class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Overall Equipment Effectiveness (OEE) Dashboard</h2>
+                <p class="text-md text-slate-600 mb-8">This dashboard focuses on manufacturing productivity by tracking Availability, Performance, and Quality to calculate OEE and identify efficiency losses.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800">KPIs & Calculations</h3>
+                        <ul class="space-y-4 text-slate-700">
+                            <li><strong class="font-medium text-slate-900">OEE (%):</strong> `Availability × Performance × Quality`</li>
+                            <li><strong class="font-medium text-slate-900">TEEP (%):</strong> `Utilization × OEE`</li>
+                            <li><strong class="font-medium text-slate-900">Availability:</strong> `(Run Time / Planned Production Time) × 100`</li>
+                            <li><strong class="font-medium text-slate-900">Downtime Cost per Minute (£):</strong> Derived from total downtime cost and duration.</li>
+                        </ul>
+                        <h3 class="text-xl font-semibold mt-8 mb-4 text-slate-800">Interactive Filters</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <span class="bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">Date Range</span>
+                            <span class="bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">Shift</span>
+                            <span class="bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">Downtime Reason</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800 text-center">Visualization Example: OEE Trend</h3>
+                        <div class="chart-container">
+                            <canvas id="oeeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cost-per-unit" class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Manufacturing Cost per Unit Dashboard</h2>
+                <p class="text-md text-slate-600 mb-8">This view breaks down the total cost for each unit produced, tracking efficiency metrics and variances against budget to manage production costs effectively.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800">KPIs & Calculations</h3>
+                        <ul class="space-y-4 text-slate-700">
+                            <li><strong class="font-medium text-slate-900">Total Cost per Unit (£):</strong> `(Materials + Labor + Overhead) / Units Produced`</li>
+                            <li><strong class="font-medium text-slate-900">Labor Efficiency (%):</strong> `Standard Hours / Actual Hours × 100`</li>
+                            <li><strong class="font-medium text-slate-900">Material Yield (%):</strong> `Good Output / Total Input × 100`</li>
+                            <li><strong class="font-medium text-slate-900">Cost Variance:</strong> `Actual Cost – Budgeted Cost`</li>
+                        </ul>
+                        <h3 class="text-xl font-semibold mt-8 mb-4 text-slate-800">Interactive Filters</h3>
+                        <div class="flex flex-wrap gap-4">
+                            <span class="bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">Month</span>
+                            <span class="bg-slate-100 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">Cost Category</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4 text-slate-800 text-center">Visualization Example: Efficiency KPIs</h3>
+                        <div class="flex justify-around items-center h-full">
+                            <div class="chart-container !h-64 !w-64">
+                                <canvas id="laborEfficiencyChart"></canvas>
+                                <p class="text-center mt-2 font-medium text-slate-700">Labor Efficiency</p>
+                            </div>
+                            <div class="chart-container !h-64 !w-64">
+                                <canvas id="materialYieldChart"></canvas>
+                                <p class="text-center mt-2 font-medium text-slate-700">Material Yield</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="ai-insights" class="bg-white p-8 rounded-2xl shadow-lg border border-slate-200 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-slate-900 mb-2">Bonus: AI-Generated Insights</h2>
+                <p class="text-md text-slate-600 mb-8">A key feature will be an AI-powered module that provides actionable suggestions based on data patterns, helping to move from monitoring to proactive optimization.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-semibold text-lg text-slate-800 mb-2">🤖 Predictive Alerts</h3>
+                        <p class="text-sm text-slate-600">The system will analyze trends to forecast potential issues, such as a likely decline in OEE, allowing for pre-emptive action.</p>
+                        <div class="mt-4 bg-amber-100 border-l-4 border-amber-500 text-amber-700 p-3 rounded-md text-xs">
+                            <strong>Alert:</strong> OEE is projected to drop by 5% next week based on current downtime trends.
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-semibold text-lg text-slate-800 mb-2">🧠 Suggested Root Causes</h3>
+                        <p class="text-sm text-slate-600">When an anomaly like a spike in COPQ occurs, the AI will analyze contributing factors and suggest likely root causes.</p>
+                        <div class="mt-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded-md text-xs">
+                            <strong>Insight:</strong> The recent 15% increase in Scrap Cost is correlated with a new batch of raw material 'XM-42'.
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <h3 class="font-semibold text-lg text-slate-800 mb-2">💡 Optimization Suggestions</h3>
+                        <p class="text-sm text-slate-600">Based on historical data, the AI will recommend optimizations to improve efficiency metrics.</p>
+                         <div class="mt-4 bg-emerald-100 border-l-4 border-emerald-500 text-emerald-700 p-3 rounded-md text-xs">
+                            <strong>Suggestion:</strong> Shifts run by Operator B on Line 3 consistently show 4% higher material yield. Consider cross-training.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-24">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Interactive Project Plan. For discussion purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const createCopqChart = () => {
+                const ctx = document.getElementById('copqChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Scrap', 'Rework', 'Warranty', 'Other'],
+                        datasets: [{
+                            label: 'Cost (£)',
+                            data: [12500, 5600, 8900, 2300],
+                            backgroundColor: ['#FCA5A5', '#FDBA74', '#FCD34D', '#A5B4FC'],
+                            borderColor: ['#EF4444', '#F97316', '#F59E0B', '#6366F1'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            };
+
+            const createOeeChart = () => {
+                const ctx = document.getElementById('oeeChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                        datasets: [{
+                            label: 'OEE (%)',
+                            data: [85, 88, 86, 90, 87, 91],
+                            fill: true,
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderColor: 'rgb(16, 185, 129)',
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: false, min: 75, max: 95 } }
+                    }
+                });
+            };
+
+            const createDoughnutChart = (canvasId, label, data, color) => {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [label, ''],
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [color, '#E5E7EB'],
+                            borderColor: ['#FFFFFF'],
+                            borderWidth: 2,
+                            circumference: 180,
+                            rotation: 270,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        cutout: '75%',
+                    }
+                });
+            };
+
+            createCopqChart();
+            createOeeChart();
+            createDoughnutChart('laborEfficiencyChart', 'Efficiency', [92, 8], '#34D399');
+            createDoughnutChart('materialYieldChart', 'Yield', [96, 4], '#60A5FA');
+
+
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+
+</body>
+</html>
